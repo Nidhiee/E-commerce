@@ -28,7 +28,21 @@ const productSchema = new mongoose.Schema({
     default: 0
   },
   imageUrl: {
-    type: String
+    type: String   // legacy single cover image, kept for existing cart/order snapshots
+  },
+  media: {
+    type: [
+      {
+        type: {
+          type: String,
+          enum: ['image', 'video'],
+          default: 'image'
+        },
+        url: { type: String, required: true, trim: true },
+        altText: { type: String, trim: true }
+      }
+    ],
+    default: []
   },
   ratings: {
     average: { type: Number, default: 0, min: 0, max: 5 },
@@ -45,8 +59,17 @@ color: {
 },
 weight: {
   type: Number   // in grams, useful for shipping calculations later
+},
+isActive: {
+  type: Boolean,
+  default: true    // soft-delete flag; false hides the product from listings
 }
 
 }, { timestamps: true });
+
+// Matches the GET /api/products query: filter by category + isActive,
+// sorted by createdAt.
+productSchema.index({ category: 1, isActive: 1 });
+productSchema.index({ isActive: 1, createdAt: -1 });
 
 module.exports = mongoose.model('Product', productSchema);

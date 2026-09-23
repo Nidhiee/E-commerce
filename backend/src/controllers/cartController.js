@@ -8,7 +8,7 @@ const getCart = async (req, res) => {
   try {
     let cart = await Cart.findOne({ user: req.user._id }).populate(
       'items.product',
-      'name price imageUrl stock'
+      'name price imageUrl media stock'
     );
 
     if (!cart) {
@@ -42,14 +42,22 @@ const addToCart = async (req, res) => {
       (item) => item.product.toString() === productId
     );
 
+    const requestedQuantity = (existingItem ? existingItem.quantity : 0) + Number(quantity);
+
+    if (requestedQuantity > product.stock) {
+      return res.status(400).json({
+        message: `Only ${product.stock} unit(s) of ${product.name} in stock`
+      });
+    }
+
     if (existingItem) {
-      existingItem.quantity += Number(quantity);
+      existingItem.quantity = requestedQuantity;
     } else {
       cart.items.push({ product: productId, quantity });
     }
 
     await cart.save();
-    await cart.populate('items.product', 'name price imageUrl stock');
+    await cart.populate('items.product', 'name price imageUrl media stock');
 
     res.status(201).json(cart);
   } catch (error) {
@@ -77,9 +85,20 @@ const updateCartItem = async (req, res) => {
       return res.status(404).json({ message: 'Item not in cart' });
     }
 
+    const product = await Product.findById(req.params.productId);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    if (Number(quantity) > product.stock) {
+      return res.status(400).json({
+        message: `Only ${product.stock} unit(s) of ${product.name} in stock`
+      });
+    }
+
     item.quantity = quantity;
     await cart.save();
-    await cart.populate('items.product', 'name price imageUrl stock');
+    await cart.populate('items.product', 'name price imageUrl media stock');
 
     res.json(cart);
   } catch (error) {
@@ -103,7 +122,7 @@ const removeFromCart = async (req, res) => {
     );
 
     await cart.save();
-    await cart.populate('items.product', 'name price imageUrl stock');
+    await cart.populate('items.product', 'name price imageUrl media stock');
 
     res.json(cart);
   } catch (error) {

@@ -10,7 +10,10 @@ const getProducts = async (req, res) => {
     const filter = { isActive: true };
 
     if (keyword) {
-      filter.name = { $regex: keyword, $options: 'i' };
+      filter.$or = [
+        { name: { $regex: keyword, $options: 'i' } },
+        { description: { $regex: keyword, $options: 'i' } }
+      ];
     }
 
     if (category) {
@@ -106,10 +109,32 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+// @desc    Restore a soft-deleted product
+// @route   PATCH /api/products/:id/restore
+// @access  Private/Admin
+const restoreProduct = async (req, res) => {
+  try {
+    const product = await Product.findByIdAndUpdate(
+      req.params.id,
+      { isActive: true },
+      { new: true }
+    );
+
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    res.json(product);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getProducts,
   getProductById,
   createProduct,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  restoreProduct
 };
