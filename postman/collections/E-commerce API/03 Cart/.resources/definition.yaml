@@ -1,0 +1,5 @@
+$kind: collection
+name: 03 Cart
+description: |-
+  The logged-in customer's cart. Uses `accessToken` and `productId`.
+order: 3000

@@ -1,0 +1,17 @@
+$kind: collection
+name: E-commerce API
+description: |-
+  Requests for every endpoint of the Express backend (backend/server.js).
+
+  Select the "E-commerce Local" environment, start the backend with
+  `npm run dev`, then run the folders top to bottom. Login requests store
+  tokens in collection variables, and create/list requests store the ids
+  that later requests use, so the whole collection can run in one go.
+
+  Admin requests need adminEmail / adminPassword set in the environment
+  (the same values as ADMIN_EMAIL / ADMIN_PASSWORD in backend/.env).
+variables:
+  accessToken: ""
+  adminAccessToken: ""
+  productId: ""
+  orderId: ""

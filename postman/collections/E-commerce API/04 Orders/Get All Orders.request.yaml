@@ -1,0 +1,16 @@
+$kind: http-request
+name: Get All Orders
+description: |-
+  Admin only.
+method: GET
+url: "{{baseUrl}}/api/orders"
+order: 4000
+headers:
+  Authorization: Bearer {{adminAccessToken}}
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', function () {
+          pm.response.to.have.status(200);
+      });

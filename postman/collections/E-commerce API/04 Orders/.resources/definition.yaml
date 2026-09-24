@@ -1,0 +1,5 @@
+$kind: collection
+name: 04 Orders
+description: |-
+  Checkout and order management. Create Order turns the current cart into an order.
+order: 4000

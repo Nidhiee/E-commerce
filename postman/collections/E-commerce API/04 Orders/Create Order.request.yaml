@@ -1,0 +1,31 @@
+$kind: http-request
+name: Create Order
+description: |-
+  Creates an order from the cart, reduces stock and empties the cart. Stores the id in `orderId`.
+method: POST
+url: "{{baseUrl}}/api/orders"
+order: 1000
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{accessToken}}
+body:
+  type: json
+  content: |-
+    {
+      "shippingAddress": {
+        "address": "12 MG Road",
+        "city": "Bengaluru",
+        "postalCode": "560001",
+        "country": "India"
+      },
+      "paymentMethod": "COD"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 201', function () {
+          pm.response.to.have.status(201);
+      });
+
+      pm.collectionVariables.set('orderId', pm.response.json()._id);

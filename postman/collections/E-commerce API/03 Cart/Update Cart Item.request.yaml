@@ -1,0 +1,23 @@
+$kind: http-request
+name: Update Cart Item
+description: |-
+  Sets the quantity of a product already in the cart.
+method: PUT
+url: "{{baseUrl}}/api/cart/{{productId}}"
+order: 3000
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{accessToken}}
+body:
+  type: json
+  content: |-
+    {
+      "quantity": 2
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', function () {
+          pm.response.to.have.status(200);
+      });

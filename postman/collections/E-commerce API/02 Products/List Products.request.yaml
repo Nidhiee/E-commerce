@@ -1,0 +1,19 @@
+$kind: http-request
+name: List Products
+description: |-
+  Public. Supports keyword search, category filter and pagination. Remove query params you do not need.
+method: GET
+url: "{{baseUrl}}/api/products?keyword=headphones&category=Electronics&page=1&limit=10"
+order: 2000
+queryParams:
+  keyword: "headphones"
+  category: "Electronics"
+  page: "1"
+  limit: "10"
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', function () {
+          pm.response.to.have.status(200);
+      });

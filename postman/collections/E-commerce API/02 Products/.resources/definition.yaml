@@ -1,0 +1,5 @@
+$kind: collection
+name: 02 Products
+description: |-
+  Product catalog. Listing and reading are public; create, update, delete and restore are admin only.
+order: 2000

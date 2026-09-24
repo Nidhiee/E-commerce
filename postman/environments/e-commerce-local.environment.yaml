@@ -1,0 +1,25 @@
+name: E-commerce Local
+values:
+  - key: baseUrl
+    value: http://localhost:5000
+    enabled: true
+
+  # Throwaway test customer created by the Register request.
+  - key: customerName
+    value: Test Customer
+    enabled: true
+  - key: customerEmail
+    value: customer@example.com
+    enabled: true
+  - key: customerPassword
+    value: secret123
+    enabled: true
+
+  # Left blank on purpose - this file is committed. Fill them in Postman with
+  # ADMIN_EMAIL / ADMIN_PASSWORD from your own backend/.env.
+  - key: adminEmail
+    value: ''
+    enabled: true
+  - key: adminPassword
+    value: ''
+    enabled: true

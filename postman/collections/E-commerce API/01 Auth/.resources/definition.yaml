@@ -1,0 +1,6 @@
+$kind: collection
+name: 01 Auth
+description: |-
+  Register, log in, and manage the session.
+  Login stores the customer token in `accessToken`; Login as Admin stores `adminAccessToken`.
+order: 1000

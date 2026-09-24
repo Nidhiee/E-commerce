@@ -1,0 +1,35 @@
+$kind: http-request
+name: Create Product
+description: |-
+  Admin only. Stores the new product id in `productId`.
+method: POST
+url: "{{baseUrl}}/api/products"
+order: 1000
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{adminAccessToken}}
+body:
+  type: json
+  content: |-
+    {
+      "name": "Wireless Headphones",
+      "description": "Noise-cancelling over-ear headphones",
+      "price": 2999,
+      "category": "Electronics",
+      "subCategory": "Headphones",
+      "brand": "Acme",
+      "stock": 25,
+      "imageUrl": "https://example.com/headphones.jpg",
+      "warranty": "1 year manufacturer warranty",
+      "color": "Black",
+      "weight": 250
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 201', function () {
+          pm.response.to.have.status(201);
+      });
+
+      pm.collectionVariables.set('productId', pm.response.json()._id);

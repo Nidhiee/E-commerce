@@ -1,0 +1,25 @@
+$kind: http-request
+name: Login as Admin
+description: |-
+  Logs in with the admin account seeded from backend/.env and stores `adminAccessToken`.
+method: POST
+url: "{{baseUrl}}/api/auth/login"
+order: 5000
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "{{adminEmail}}",
+      "password": "{{adminPassword}}"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.collectionVariables.set('adminAccessToken', pm.response.json().accessToken);

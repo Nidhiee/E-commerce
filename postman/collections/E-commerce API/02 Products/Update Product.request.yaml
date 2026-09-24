@@ -1,0 +1,24 @@
+$kind: http-request
+name: Update Product
+description: |-
+  Admin only. Send only the fields you want to change.
+method: PUT
+url: "{{baseUrl}}/api/products/{{productId}}"
+order: 4000
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{adminAccessToken}}
+body:
+  type: json
+  content: |-
+    {
+      "price": 2499,
+      "stock": 30
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', function () {
+          pm.response.to.have.status(200);
+      });

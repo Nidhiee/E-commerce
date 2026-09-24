@@ -1,0 +1,16 @@
+$kind: http-request
+name: Remove From Cart
+description: |-
+  Removes the product line. Run Add To Cart again afterwards if you want to place an order.
+method: DELETE
+url: "{{baseUrl}}/api/cart/{{productId}}"
+order: 4000
+headers:
+  Authorization: Bearer {{accessToken}}
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', function () {
+          pm.response.to.have.status(200);
+      });

@@ -1,0 +1,24 @@
+$kind: http-request
+name: Register
+description: |-
+  Creates a customer account. Returns 400 if the email is already registered, which is fine on repeat runs.
+method: POST
+url: "{{baseUrl}}/api/auth/register"
+order: 1000
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "{{customerName}}",
+      "email": "{{customerEmail}}",
+      "password": "{{customerPassword}}"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is one of 201/400', function () {
+          pm.expect(pm.response.code).to.be.oneOf([201, 400]);
+      });

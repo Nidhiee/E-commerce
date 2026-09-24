@@ -1,0 +1,26 @@
+$kind: http-request
+name: Login
+description: |-
+  Logs in as the test customer and stores the access token.
+  Also sets the httpOnly refreshToken cookie used by Refresh Token.
+method: POST
+url: "{{baseUrl}}/api/auth/login"
+order: 2000
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "email": "{{customerEmail}}",
+      "password": "{{customerPassword}}"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.collectionVariables.set('accessToken', pm.response.json().accessToken);

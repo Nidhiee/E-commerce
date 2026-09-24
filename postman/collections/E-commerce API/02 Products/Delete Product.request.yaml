@@ -1,0 +1,16 @@
+$kind: http-request
+name: Delete Product
+description: |-
+  Admin only. Soft delete: sets isActive to false so the product disappears from List Products.
+method: DELETE
+url: "{{baseUrl}}/api/products/{{productId}}"
+order: 5000
+headers:
+  Authorization: Bearer {{adminAccessToken}}
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', function () {
+          pm.response.to.have.status(200);
+      });

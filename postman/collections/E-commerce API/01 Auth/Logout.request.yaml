@@ -1,0 +1,14 @@
+$kind: http-request
+name: Logout
+description: |-
+  Revokes the current refresh token and clears the cookie. Access tokens stay valid until they expire (15 min).
+method: POST
+url: "{{baseUrl}}/api/auth/logout"
+order: 6000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', function () {
+          pm.response.to.have.status(200);
+      });

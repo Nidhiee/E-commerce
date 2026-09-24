@@ -1,0 +1,24 @@
+$kind: http-request
+name: Add To Cart Again
+description: |-
+  Puts the product back so Create Order has something to check out.
+method: POST
+url: "{{baseUrl}}/api/cart"
+order: 5000
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{accessToken}}
+body:
+  type: json
+  content: |-
+    {
+      "productId": "{{productId}}",
+      "quantity": 1
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 201', function () {
+          pm.response.to.have.status(201);
+      });

@@ -1,0 +1,23 @@
+$kind: http-request
+name: Update Order Status
+description: |-
+  Admin only. status: pending | processing | shipped | delivered | cancelled.
+method: PUT
+url: "{{baseUrl}}/api/orders/{{orderId}}/status"
+order: 5000
+headers:
+  Content-Type: application/json
+  Authorization: Bearer {{adminAccessToken}}
+body:
+  type: json
+  content: |-
+    {
+      "status": "shipped"
+    }
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test('Status code is 200', function () {
+          pm.response.to.have.status(200);
+      });
